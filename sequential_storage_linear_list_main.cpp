@@ -10,7 +10,7 @@ int main() {
 
     l1.display();
 
-    l1.del(2);
+    l1.delete_at(2);
 
     l1.display();
 }   

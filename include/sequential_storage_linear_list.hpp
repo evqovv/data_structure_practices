@@ -41,7 +41,7 @@ public:
         ++cur_size;
     }
 
-    void del(size_type idx) {
+    void delete_at(size_type idx) {
         if (idx >= cur_size) {
             ::std::abort();
         }
