@@ -7,4 +7,4 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-add_executable(data_structure_practices headed_singly_linked_list_main.cpp)
+add_executable(data_structure_practices polynomial_merger.cpp)

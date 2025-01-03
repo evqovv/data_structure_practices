@@ -20,10 +20,10 @@ public:
 
     headed_singly_linked_list(headed_singly_linked_list const &other) : head(new structure) {
         auto cur_node = other.head;
-        for (; cur_node->next != nullptr; cur_node = cur_node->next) {
+        while (cur_node->next != nullptr) {
+            cur_node = cur_node->next;
             insert_back(cur_node->data);
         }
-        insert_back(cur_node->data);
     }
 
     headed_singly_linked_list(headed_singly_linked_list &&other) noexcept : head(other.head) {
@@ -33,10 +33,10 @@ public:
     headed_singly_linked_list &operator=(headed_singly_linked_list const &other) {
         if (this != &other && !other.empty()) [[likely]] {
             auto cur_node = other.head;
-            for (; cur_node->next != nullptr; cur_node = cur_node->next) {
+            while (cur_node->next != nullptr) {
+                cur_node = cur_node->next;
                 insert_back(cur_node->data);
             }
-            insert_back(cur_node->data);
         }
 
         return *this;
@@ -66,9 +66,9 @@ public:
         size_type i = 0;
         auto cur_node = head;
 
-        while (i < idx && cur_node->next != nullptr) {
-            cur_node = cur_node->next;
+        while (i < idx && cur_node != nullptr) {
             ++i;
+            cur_node = cur_node->next;
         }
 
         if (cur_node) {
@@ -82,6 +82,17 @@ public:
         }
     }
 
+    void insert_order(T const &value) {
+        auto cur_node = head;
+
+        while (cur_node->next != nullptr && value < cur_node->next->data) {
+            cur_node = cur_node->next;
+        }
+
+        auto new_node = new structure{ value, cur_node->next };
+        cur_node->next = new_node;
+    }
+
     void insert_back(T const &value) {
         auto cur_node = head;
         for (; cur_node->next != nullptr; cur_node = cur_node->next) {}
@@ -89,8 +100,44 @@ public:
     }
 
     void delete_at(size_type idx) {
+        if (empty()) {
+            ::std::abort();
+        }
+
         size_type i = 0;
         auto cur_node = head;
+
+        while (i < idx && cur_node != nullptr) {
+            ++i;
+            cur_node = cur_node->next;
+        }
+
+        if (cur_node) {
+            if (cur_node->next->next == nullptr) {
+                delete cur_node->next;
+                cur_node->next = nullptr;
+            } else {
+                auto new_node = cur_node->next->next;
+                delete cur_node->next;
+                cur_node->next = new_node;
+            }
+        } else {
+            ::std::abort();
+        }
+    }
+
+    void delete_element(T const &value) {
+        auto cur_node = head;
+
+        while (cur_node->next != nullptr && cur_node->next->data != value) {
+            cur_node = cur_node->next;
+        }
+
+        if (cur_node->next != nullptr) {
+            auto temp = cur_node->next;
+            cur_node->next = cur_node->next->next;
+            delete temp;
+        }
     }
 
     void display() const noexcept {
